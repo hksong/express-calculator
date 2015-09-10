@@ -5,36 +5,27 @@ var express = require('express'),
 // set view engine to ejs
 app.set('view engine', 'ejs');
 
-// 'GET' request with URL parameters addition
-app.get('/add/:n1/:n2', function(req, res) {
+var operate = {
+  add: function(n1,n2) { return n1+n2; },
+  sub: function(n1,n2) { return n1-n2; },
+  mult: function(n1,n2) { return n1*n2; },
+  div: function(n1,n2) { return n1/n2; }
+};
+
+var ops = {
+  add: '+',
+  sub: '-',
+  mult: '*',
+  div: '/'
+};
+
+// 'GET' request with URL parameters mdas
+app.get('/:op/:n1/:n2', function(req, res) {
   var n1 = parseFloat(req.params.n1);
   var n2 = parseFloat(req.params.n2);
-  var ans = n1 + n2;
-  var str = n1+' + '+n2+' = '+ans;
-  res.render('index', {ans:str});
-});
-// 'GET' request with URL parameters sub
-app.get('/sub/:n1/:n2', function(req, res) {
-  var n1 = parseFloat(req.params.n1);
-  var n2 = parseFloat(req.params.n2);
-  var ans = n1 - n2;
-  var str = n1+' - '+n2+' = '+ans;
-  res.render('index', {ans:str});
-});
-// 'GET' request with URL parameters mult
-app.get('/mult/:n1/:n2', function(req, res) {
-  var n1 = parseFloat(req.params.n1);
-  var n2 = parseFloat(req.params.n2);
-  var ans = n1 * n2;
-  var str = n1+' * '+n2+' = '+ans;
-  res.render('index', {ans:str});
-});
-// 'GET' request with URL parameters div
-app.get('/div/:n1/:n2', function(req, res) {
-  var n1 = parseFloat(req.params.n1);
-  var n2 = parseFloat(req.params.n2);
-  var ans = n1 / n2;
-  var str = n1+' / '+n2+' = '+ans;
+  var op = req.params.op;
+  var ans = operate[op](n1,n2);
+  var str = n1+' '+ops[op]+' '+n2+' = '+ans;
   res.render('index', {ans:str});
 });
 
